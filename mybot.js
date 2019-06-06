@@ -11,6 +11,8 @@ const token = "NTYyNzkyOTE1MDIyMjQ5OTg1.XKQxWg.GZ7PYxGJKKfC_7N7yixADSFr4Xk";
 //IDs for testing
 var blaster = "89130841321504768";
 var toki = "83603637393166336";
+
+//Adding Discord ID
 var darkferrets = "185562247093813249";
 
 
