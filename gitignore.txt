@@ -1,0 +1,2 @@
+# Ignore config.json. It has super secret info in it
+config.json

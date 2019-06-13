@@ -5,8 +5,7 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 
 //Probably move this stuff to a settings file sometime
-const prefix = "%";
-const token = "NTYyNzkyOTE1MDIyMjQ5OTg1.XKQxWg.GZ7PYxGJKKfC_7N7yixADSFr4Xk";
+const { prefix, token } = require('./config.json');
 
 //IDs for testing
 var blaster = "89130841321504768"; 
