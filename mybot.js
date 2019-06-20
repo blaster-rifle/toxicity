@@ -1,6 +1,9 @@
 // Import the discord.js module
 const Discord = require("discord.js");
 
+//Import the Mathjs module
+const math = require("mathjs");
+
 //Create an instance of a Discord Client
 const client = new Discord.Client();
 
@@ -31,7 +34,9 @@ client.on("message", async message => {
   //Validate commands: Starts with prefix, no bots, no dms.
   if(message.author.bot) return;
   if(message.channel.type === "dm") return;
-  if (!message.content.startsWith(prefix)) return;
+  if(message.content === "?prefix")
+  {message.channel.send(prefix);}
+  else if (!message.content.startsWith(prefix)) return;
 
   //Split messages into command and arguments.
   //Remove prefix from the message.
@@ -54,6 +59,59 @@ client.on("message", async message => {
         .addField("Created at", `${message.author.createdAt}`);
 
       message.channel.send(userembed);
+    break;
+    case "r":
+      //We want to roll some dice so get what we are rolling and set some default stuff
+      let diceAmount = messageArray[1].split("d");
+      let diceSides = diceAmount[1].split(" ");
+      let diceMod = 0;
+      if(messageArray[2] === '+')
+      {
+        diceMod = parseInt(messageArray[3]);
+      }
+      let dieRollTotal = 0;
+      //let dieArray = [];
+      let dieString = "";
+      let dieRoll = 0;
+
+      diceAmount = parseInt(diceAmount[0]);
+      diceSides = parseInt(diceSides[0]);
+
+      //Create starting point for String
+      dieString = dieString.concat(messageArray[1], " = (")
+
+      //Make the rolls
+      for(x=0; x < diceAmount; x++)
+      {
+          //Number between 1 and Number of Sides on Dice
+          dieRoll = Math.floor(Math.random() * (diceSides) + 1);
+          //dieArray[x] = dieRoll;
+          dieRollTotal += dieRoll;
+
+          //Set up the return string for the user
+          if(x+1 === diceAmount){
+            dieString = dieString.concat(dieRoll, ")");
+          }
+          else{
+            dieString = dieString.concat(dieRoll, " + ");
+          }
+      }
+
+      if(!(diceMod === 0))
+      {
+        dieRollTotal += diceMod;
+        dieString = dieString.concat(" + ", diceMod, " = ", dieRollTotal);
+      }
+      else
+      {
+        dieString = dieString.concat(" = ", dieRollTotal);
+      }
+
+      message.channel.send(dieString);
+      //message.channel.send(dieArray);
+      //message.channel.send(dieRollTotal);
+      //message.channel.send(diceAmount);
+      //message.channel.send(diceSides);
     break;
   }
 
