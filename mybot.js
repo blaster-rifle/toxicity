@@ -25,9 +25,16 @@ client.on("ready", async () => {
 });
  
 client.on("message", async message => {
+ 
   //Validate commands: Starts with prefix, no bots, no dms.
   if(message.author.bot) return;
   if(message.channel.type === "dm") return;
+
+  //Special command 
+  if (message.content === "?prefix"){
+    message.channel.send(prefix);
+  }
+
   if (!message.content.startsWith(prefix)) return;
 
   //Split messages into command and arguments.
@@ -41,17 +48,39 @@ client.on("message", async message => {
     case "userinfo":
       //userinfo command
       console.log(`${message.author.username} used the userinfo command.`);
-      //Chaining!
-      let userembed = new Discord.RichEmbed()
-        .setAuthor(message.author.username)
-        .setDescription("This is the user's info!")
-        .setColor("#9B59B6")
-        .addField("Full Username", `${message.author.username}#${message.author.discriminator}`)
-        .addField("ID", `${message.author.id}`)
-        .addField("Created at", `${message.author.createdAt}`);
+      let userembed = new Discord.RichEmbed();
+      let recipient; 
+      //Check if the command mentions anyone
+      if (message.mentions.users.size){
+        console.log(`Mentions: ${message.mentions.users.size} `);
+          recipient = message.mentions.users.first();
+          console.log(recipient); 
+      }
+      else if (args.length != 0){
+        console.log(`Mentions: ${message.mentions.users.size} `);
+        try {
+        recipient = message.guild.members.get(args[0]).user;
+        }
+        catch (e) {
+            message.channel.send("There is no user with this userid.");
+            return;
+        }
+        console.log(recipient); 
 
+      }
+      else{
+        recipient = message.author;
+      }
+      userembed
+      .setAuthor(recipient.username)
+      .setDescription("This is the user's info!")
+      .setColor("#9B59B6")
+      .addField("Full Username", `${recipient.username}#${recipient.discriminator}`)
+      .addField("ID", `${recipient.id}`)
+      .addField("Created at", `${recipient.createdAt}`);
       message.channel.send(userembed);
     break;
+
   }
 
   //debug
